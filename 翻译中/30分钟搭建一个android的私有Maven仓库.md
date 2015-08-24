@@ -160,8 +160,11 @@ You can very easily verify that the upload was successful by navigating to `loca
 
 **USING THE ARTIFACTS**
 
+**使用ARTIFACTS**
+
 To make use of the published artifacts in another project we have to add our Artifactory repository to the list of Maven repositories in your top level `build.gradle` file:
 
+为了保证另一个项目也可以引用这个artifact，我们需要在根目录下的`build.gradle`文件中，把我们的仓库信息添加到仓库列表中。
 ```
 allprojects {
     repositories {
@@ -171,20 +174,32 @@ allprojects {
 ```
 After we can simply add the artifact as a dependency in the `build.gradle` file of our main project:
 
+然后，我们只需要在主工程的`build.gradle`文件中添加artifact作为依赖就可以了：
+
 ```
 dependencies {
     compile 'com.jeroenmols.awesomelibrary:1.0.0'
 }
 ```
 **WRAP-UP**
+**总结**
 
 Congratulations! You now have a fully working Maven repository manager with a Gradle script to generate and upload your artifacts.
 
+恭喜你！你完成了利用gradle生成和上传你的artifact 带Maven仓库。
+
 In the next [blog post](http://jeroenmols.github.io/blog/2015/08/13/artifactory2/) I will zoom in on more advanced topics like:
+
+在 [下一篇博客](http://jeroenmols.github.io/blog/2015/08/13/artifactory2/) ，我将继续学习一下几点:
 
 * Library projects with dependencies
 * Configuring your own repositories
 * User access management and rights
 
 Removing hardcoded username and password from `build.gradle`
+
+记得更改`build.gradle` 里的账号、密码
+
 I have also uploaded a [complete example](https://github.com/JeroenMols/ArtifactoryExample) on GitHub for your reference.
+
+我已经上传了一份 [例子](https://github.com/JeroenMols/ArtifactoryExample) 到github供你参考。
