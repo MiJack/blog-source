@@ -10,6 +10,7 @@
 
 
 Hi there !
+
 大家好！
 
 I often see public library hosted on MavenCentral, JCenter or others* … but what do you do for private things such as company libs, tools, etc ?
@@ -18,20 +19,26 @@ Of course you can see a few Maven private repository (ie. Nexus, Archiva), but i
 
 Almost ? Yes, because if you use a Git SCM like Github or Bitbucket, you can easily turn it as a Maven repository. Great, no ?
 
-*Chris Banes already wrote a great article on Maven deployment with Gradle.
+*[Chris](https://twitter.com/chrisbanes) Banes already wrote a [great article](https://chris.banes.me/2013/08/27/pushing-aars-to-maven-central/) on Maven deployment with Gradle.
 
 Let’s show some code to see how to do it !
 
-Publish to a repo
+###Publish to a repo
 
 Note : if you only use a single build.grade file, you can set everything in it. Or you can write a separate file to handle your deployments & call it with:
 
+```
 apply from: '<path-to-your-file>'
+```
 First, let’s apply the Maven plugin:
 
+```
 apply plugin: 'maven'
+```
+
 Then, let’s configure it: (sample here with Bitbucket, all the uppercase vars are properties from your project)
 
+```
 uploadArchives {
     configuration = configurations.archives
     repositories.mavenDeployer {
@@ -68,34 +75,47 @@ uploadArchives {
         }
     }
 }
+```
 Well, here you find the deployerJar configuration, we need to set this up.
 
 First, we add the Synergian Wagon-Git dependency:
 
+```
 allprojects {
     repositories {
         mavenCentral()
         maven { url "https://raw.github.com/synergian/wagon-git/releases"}
     }
 }
+```
 &
 
+```
 dependencies {
     deployerJar "ar.com.synergian:wagon-git:0.2.3"
 }
+```
+
 and the last step is to declare the configuration:
 
+```
 configurations { 
     deployerJar
 }
+```
 Now you can deploy:
 
+```
 $ gradle [clean build] uploadArchives
+```
+
 And … you’re done !
 
-Fetch your lib !
+###Fetch your lib !
+
 Well, now that you are able to publish your libs (private or not) to a repo hosted on Bitbucket (or others), it’s pretty easy to access it:
 
+```
 allprojects {
     repositories {
         mavenCentral()
@@ -115,13 +135,17 @@ allprojects {
         }
     }
 }
+```
+
 Of course, it’s better not to set your credentials in your build.gradle project file which is a versioned file, but you can set them in your home gradle.properties settings. One of the best way to be “secure” would be to have a dedicated user to fetch your libs, with a read-only profile, to whom your repository is shared … By the way, notice that the credentials are only necessary if you use a private repository.
 
 And then, finally, just add your new dependency, just as usual:
 
+```
 dependencies {
       compile "GROUP-ID:ARTIFACT-ID:VERSION"
 }
+```
 You can find the deploy.gradle file on github
 
 That’s it ;-)
